@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.reap</groupId>
+		<artifactId>reap-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>reap-base</artifactId>
+	<properties>
+		<reap-cloud-runtime.version>0.0.1-SNAPSHOT</reap-cloud-runtime.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.reap</groupId>
+			<artifactId>reap-cloud-runtime</artifactId>
+			<version>${reap-cloud-runtime.version}</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version >0.12</version>
+				<configuration>
+					<message >Maven artifacts for ${project.version}</message>
+					<noJekyll>true</noJekyll>
+
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory><!--本地jar地址-->
+					<branch>refs/heads/dev</branch><!--分支的名称-->
+					<merge>true</merge>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>mvn-repo</repositoryName><!--对应github上创建的仓库名称 name-->
+					<repositoryOwner>xyz3200259</repositoryOwner><!--github 仓库所有者即登录用户名-->
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
